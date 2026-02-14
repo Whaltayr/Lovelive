@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="pt" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elsa & Desconhecido — Moonlight • LoveLive</title>
+  <meta name="description" content="Página Moonlight — amor sob a lua. Fotos, música e carta.">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            moon: {
+              deep: '#0F172A',
+              soft: '#1E293B',
+              silver: '#E5E7EB',
+              glow: '#A78BFA'
+            }
+          },
+          fontFamily: { display: ['Playfair Display','serif'], ui: ['Inter','sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+  /* Theme variables */
+:root{
+  --moon-deep: #0F172A;
+  --moon-soft: #1E293B;
+  --moon-silver: #E5E7EB;
+  --moon-glow: #A78BFA;
+  --text-default: #E6E9EE;
+  --muted: rgba(230,233,238,0.78);
+  --glass: rgba(255,255,255,0.04);
+  --card-shadow: 0 10px 30px rgba(2,6,23,0.55);
+  --radius: 12px;
+  --max-content-width: 1100px;
+  --accent: var(--moon-glow);
+  --transition-fast: 180ms;
+  --transition-med: 320ms;
+  --transition-slow: 520ms;
+}
+
+/* Base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--moon-deep);
+  color:var(--text-default);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+
+/* Layout helpers */
+.container{
+  max-width:var(--max-content-width);
+  margin:0 auto;
+  padding:0 1rem;
+}
+
+/* Typography */
+h1,h2,h3,h4{font-family:"Playfair Display",serif;margin:0 0 .5rem;line-height:1.05}
+p{margin:0 0 1rem}
+.lead{color:var(--muted);font-size:1.05rem}
+
+/* Images */
+.photo{object-fit:cover;display:block}
+img{max-width:100%;height:auto;display:block}
+
+/* Card / Polaroid */
+.polaroid{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:var(--card-shadow);
+  transition:transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+}
+.polaroid:hover{ transform: translateY(-6px) scale(1.01); box-shadow: 0 18px 60px rgba(0,0,0,0.5); }
+
+/* Gallery grid */
+.grid-gallery{ display:grid; gap:0.75rem; grid-template-columns: repeat(2, 1fr); }
+@media(min-width:768px){ .grid-gallery{ grid-template-columns: repeat(4, 1fr); } }
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.6rem 1rem; border-radius:999px; font-weight:600;
+  transition:opacity var(--transition-fast), transform var(--transition-fast);
+}
+.btn-primary{ background:var(--accent); color:white; box-shadow:0 8px 26px rgba(167,139,250,0.12); }
+.btn-ghost{ background:transparent; color:var(--muted); border:1px solid rgba(230,233,238,0.06); }
+
+/* Lightbox (robust & immersive) */
+/* Accepts both .ll-lightbox and #ll-lightbox naming */
+.ll-lightbox, #ll-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  background: linear-gradient(180deg, rgba(2,6,23,0.92), rgba(2,6,23,0.96));
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  -webkit-tap-highlight-color: transparent;
+}
+.ll-lightbox.open, #ll-lightbox.open { display:flex; }
+
+/* lightbox content wrapper */
+.ll-lightbox .content, #ll-lightbox .content {
+  position: relative;
+  width: min(1200px, 96vw);
+  height: min(88vh, 960px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 1rem;
+}
+
+/* the image itself (large, centered) */
+.ll-lightbox img, #ll-lightbox img {
+  width:auto;
+  height:auto;
+  max-width: 92vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 14px;
+  box-shadow: 0 40px 120px rgba(8,10,30,0.7);
+  transition: transform var(--transition-fast) cubic-bezier(.2,.9,.2,1), opacity var(--transition-fast);
+  transform-origin: center center;
+}
+
+/* subtle zoom animation */
+@keyframes zoomSoft {
+  from { opacity: 0; transform: scale(.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.ll-lightbox.open img, #ll-lightbox.open img { animation: zoomSoft .38s ease both; }
+
+/* controls */
+.ll-close, #ll-lightbox .ll-close, .ll-prev, .ll-next {
+  position:absolute; z-index: 30;
+  background: rgba(0,0,0,0.44); color: #fff;
+  border: none; padding: 8px 10px; border-radius: 10px;
+  cursor: pointer; backdrop-filter: blur(4px);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+.ll-close { top: 16px; right: 16px; }
+.ll-prev { left: 12px; top: 50%; transform: translateY(-50%); }
+.ll-next { right: 12px; top: 50%; transform: translateY(-50%); }
+.ll-close:focus, .ll-prev:focus, .ll-next:focus{ outline: 2px solid rgba(167,139,250,0.22); outline-offset: 3px; }
+
+/* caption & touch hint */
+.ll-caption{ color:var(--muted); font-size: .95rem; margin-top:.6rem; text-align:center; }
+.ll-touchhint{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); color:rgba(230,233,238,0.85); font-size:12px; }
+
+/* make controls less intrusive on mobile */
+@media(max-width:640px){
+  .ll-prev, .ll-next { display:none; }
+  .ll-close { top: 10px; right:10px; padding:6px 8px; border-radius:8px; }
+}
+
+/* Reveal / micro-animations */
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatSlow {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+@keyframes pulseSoft {
+  0% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.95; }
+}
+
+.reveal { animation: fadeUp var(--transition-slow) cubic-bezier(.2,.9,.2,1) forwards; }
+.float-slow { animation: floatSlow 4s ease-in-out infinite; }
+.pulse-soft { animation: pulseSoft 2.4s ease-in-out infinite; transform-origin:center; }
+
+/* Word helpers (used by JS split) */
+.word{ display:inline-block; will-change: transform, opacity; transform-origin: center; }
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .float-slow, .pulse-soft, .ll-lightbox img { animation: none !important; transition:none !important; }
+}
+
+/* Footer / small components */
+.signature { font-family: "Playfair Display", serif; font-size:1.25rem; color:var(--accent); }
+
+/* Utility helpers */
+.hidden { display:none !important; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+/* Small responsive tweaks */
+@media(min-width:768px){
+  .container { padding:0 2rem; }
+  .polaroid img { height:220px; object-fit:cover; }
+}
+@media(max-width:767px){
+  .polaroid img { height:160px; }
+  .container { padding:0 1rem; }
+}
+
+  </style>
+</head>
+<body class="antialiased bg-moon-deep text-moon-silver font-ui">
+  <main class="max-w-3xl mx-auto p-6">
+    <!-- HERO -->
+    <section class="text-center py-8">
+      <div class="mx-auto w-56 h-56 rounded-full overflow-hidden ring-8 ring-moon-soft shadow-lg">
+        <img src="./assets/hero.webp" alt="Elsa & parceiro" class="w-full h-full photo">
+      </div>
+      <h1 class="text-4xl font-bold text-white mt-6">Elsa <span class="text-moon-glow">&amp;</span> Desconhecido</h1>
+      <p id="days" class="text-moon-silver/80 mt-2">— X dias juntos —</p>
+
+      <div class="mt-6 flex justify-center gap-3">
+      
+        <a href="#carta" class="px-4 py-2 border border-moon-silver/20 text-moon-silver rounded-md">Ler carta</a>
+      </div>
+    </section>
+
+    <!-- VIDEO (CINEMATIC) -->
+    <section class="mt-8 bg-black/30 rounded-lg p-4">
+      <video src="./assets/clip.mp4" controls playsinline class="w-full rounded-md"></video>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="mt-8">
+      <h2 class="text-xl font-semibold text-white mb-3">Nossos Momentos</h2>
+
+      <div id="gallery" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="0" aria-label="Abrir imagem 1">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-01.webp" alt="Momento 1">
+        </button>
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="1" aria-label="Abrir imagem 2">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-02.webp" alt="Momento 2">
+        </button>
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="2" aria-label="Abrir imagem 3">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-03.webp" alt="Momento 3">
+        </button>
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="3" aria-label="Abrir imagem 4">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-04.webp" alt="Momento 4">
+        </button>
+
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="4" aria-label="Abrir imagem 5">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-05.webp" alt="Momento 5">
+        </button>
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="5" aria-label="Abrir imagem 6">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-06.webp" alt="Momento 6">
+        </button>
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="6" aria-label="Abrir imagem 7">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-07.webp" alt="Momento 7">
+        </button>
+        <button class="polaroid block p-0 border-0 bg-transparent" data-index="7" aria-label="Abrir imagem 8">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-08.webp" alt="Momento 8">
+        </button>
+      </div>
+    </section>
+
+  <section id="carta" class="mt-8 bg-moon-soft/6 p-5 rounded-md border border-moon-soft/20 overflow-hidden">
+  <h3 class="text-lg font-semibold text-white mb-3">Carta de Amor</h3>
+
+  <article class="relative prose prose-invert max-w-none">
+    <p id="love-paragraph" class="text-moon-silver/90 leading-relaxed opacity-0 translate-y-3">
+      <span class="word">Meu amor,</span><br><br>
+      <span class="word">Cada noite contigo é um lugar onde eu me encontro.</span>
+      <span class="word">As conversas pequenas, os silêncios que sabem a casa</span>
+      <span class="word">e o riso partilhado compõem a nossa geografia — feita de gestos simples e milagres íntimos.</span><br><br>
+      <span class="word">Obrigado por veres o melhor em mim, por celebrares as minhas pequenas falhas</span>
+      <span class="word">e por dançares comigo nos dias comuns.</span>
+      <span class="word">Que continuemos a colecionar dias assim: claros, verdadeiros e cheios de calma.</span><br><br>
+    </p>
+
+    <div class="mt-6 text-right">
+      <div id="signature" class="text-sm text-moon-glow font-semibold opacity-0 scale-95">Com todo o meu amor,</div>
+      <div id="sign-name" class="font-display text-2xl text-white font-bold mt-1 opacity-0 translate-y-2">Elsa</div>
+    </div>
+  </article>
+</section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="ll-lightbox" class="ll-lightbox" role="dialog" aria-hidden="true" aria-label="Visualizador de imagens">
+    <div class="content" role="document">
+      <button class="ll-close" aria-label="Fechar (Esc)">✕</button>
+      <button class="ll-prev" aria-label="Imagem anterior">‹</button>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <img id="ll-img" src="" alt="" />
+        <div id="ll-caption" class="ll-caption"></div>
+        <div class="ll-touchhint">Swipe para navegar</div>
+      </div>
+      <button class="ll-next" aria-label="Próxima imagem">›</button>
+    </div>
+  </div>
+
+  <script>
+    // Data e elementos
+    const galleryImgs = Array.from(document.querySelectorAll('.gallery-img'));
+    const lightbox = document.getElementById('ll-lightbox');
+    const llImg = document.getElementById('ll-img');
+    const llCaption = document.getElementById('ll-caption');
+    const btnClose = document.querySelector('.ll-close');
+    const btnPrev = document.querySelector('.ll-prev');
+    const btnNext = document.querySelector('.ll-next');
+    let currentIndex = 0;
+
+    const items = galleryImgs.map(img => ({
+      src: img.getAttribute('src'),
+      alt: img.getAttribute('alt') || ''
+    }));
+
+    function openLightbox(index){
+      currentIndex = index;
+      const it = items[currentIndex];
+      llImg.src = it.src;
+      llImg.alt = it.alt;
+      llCaption.textContent = it.alt || `Imagem ${currentIndex + 1}`;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      // focus for keyboard control
+      btnClose.focus();
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden','true');
+      llImg.src = '';
+      document.body.style.overflow = '';
+    }
+    function next(){
+      currentIndex = (currentIndex + 1) % items.length;
+      updateLightbox();
+    }
+    function prev(){
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      updateLightbox();
+    }
+    function updateLightbox(){
+      const it = items[currentIndex];
+      llImg.src = it.src;
+      llImg.alt = it.alt;
+      llCaption.textContent = it.alt || `Imagem ${currentIndex + 1}`;
+    }
+
+    // event binding
+    document.querySelectorAll('#gallery [data-index]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        const i = Number(btn.dataset.index);
+        openLightbox(i);
+      });
+    });
+
+    btnClose.addEventListener('click', closeLightbox);
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+
+    // keyboard
+    document.addEventListener('keydown', (e)=>{
+      if (lightbox.classList.contains('open')){
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') next();
+        if (e.key === 'ArrowLeft') prev();
+      }
+    });
+
+    // click outside to close
+    lightbox.addEventListener('click', (e)=>{
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // touch swipe (simple)
+    let startX = 0;
+    llImg.addEventListener('touchstart', (e)=> {
+      startX = e.touches[0].clientX;
+    });
+    llImg.addEventListener('touchend', (e)=> {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (dx > 40) prev();
+      else if (dx < -40) next();
+    });
+
+    // Optional: preload neighbor images for speed
+    function preloadNeighbor(idx){
+      const nextIdx = (idx + 1) % items.length;
+      const prevIdx = (idx - 1 + items.length) % items.length;
+      [nextIdx, prevIdx].forEach(i=>{
+        const img = new Image();
+        img.src = items[i].src;
+      });
+    }
+    // update preload on open/update
+    const obs = new MutationObserver(()=> preloadNeighbor(currentIndex));
+    obs.observe(llImg, { attributes: true });
+
+    // compute days from a start date (optional)
+    (function computeDays(){
+      const startISO = '2020-02-14'; // ajuste se necessário
+      const start = new Date(startISO + 'T00:00:00');
+      const now = new Date();
+      const days = Math.max(0, Math.floor((now - start) / (1000*60*60*24)));
+      const el = document.getElementById('days');
+      if (el) el.textContent = `— ${days.toLocaleString()} dias juntos —`;
+    })();
+  </script>
+  
+<script>
+(function() {
+  function onReady(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+
+  onReady(function(){
+    const para = document.getElementById('love-paragraph');
+    const sigText = document.getElementById('sign-name');
+    const sigNote = document.getElementById('signature');
+
+    // safety: if para missing, bail out gracefully and reveal nothing
+    if (!para) {
+      // fallback: show signature if exists
+      if (sigNote) sigNote.style.opacity = '1';
+      if (sigText) sigText.style.opacity = '1';
+      return;
+    }
+
+    // If spans.word are not present, wrap text into spans automatically
+    let words = Array.from(para.querySelectorAll('.word'));
+    if (words.length === 0) {
+      // take the raw text (preserve inner line breaks)
+      const raw = para.innerHTML.trim();
+      // split by spaces but preserve <br> tags
+      // convert into spans while preserving existing <br> and tags
+      // simple approach: split on spaces and replace
+      const tokens = raw.split(/\s+/);
+      para.innerHTML = tokens.map(t => {
+        if (t.includes('<br') || t === '<br>' || t === '<br/>') return t;
+        return `<span class="word">${t.replace(/</g,'&lt;')}</span>`;
+      }).join(' ');
+      words = Array.from(para.querySelectorAll('.word'));
+    }
+
+    // prepare initial styles
+    para.style.opacity = '0';
+    words.forEach(w => { w.style.opacity = '0'; });
+
+    // reveal helper (stagger + optional float)
+    function revealOnce() {
+      // reveal container with animation class (keeps CSS separation)
+      para.classList.add('reveal');
+      // stagger words
+      words.forEach((w, i) => {
+        const delay = 140 + i * 28;
+        setTimeout(() => {
+          w.style.transition = 'opacity 320ms ease, transform 360ms ease';
+          w.style.opacity = '1';
+          // subtle float for variety
+          if (i % 4 === 0) w.classList.add('float-slow');
+        }, delay);
+      });
+
+      // signature reveal after words
+      setTimeout(() => {
+        if (sigNote) { sigNote.classList.add('reveal','pulse-soft'); sigNote.style.opacity = '1'; }
+        if (sigText) { sigText.classList.add('reveal'); sigText.style.opacity = '1'; }
+      }, 850);
+    }
+
+    // IntersectionObserver to trigger when in view (with guard)
+    let ioFired = false;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          if (ioFired) return;
+          ioFired = true;
+          // ensure container visible (animation keyframes handle movement)
+          para.style.opacity = '1';
+          revealOnce();
+          obs.disconnect();
+        });
+      }, { threshold: 0.16 });
+      io.observe(para);
+    } else {
+      // fallback for older browsers: reveal after a short timeout
+      setTimeout(() => {
+        para.style.opacity = '1';
+        revealOnce();
+      }, 600);
+    }
+
+    // safety fallback if IO never fires (still hidden) -> reveal after 3s
+    setTimeout(() => {
+      if (!ioFired) {
+        para.style.opacity = '1';
+        revealOnce();
+      }
+    }, 3000);
+  });
+})();
+</script>
+
+</body>
+</html>
