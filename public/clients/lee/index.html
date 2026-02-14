@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lee — Moonlight • LoveLive</title>
+  <meta name="description" content="Página Moonlight — amor sob a lua. Fotos e carta dedicada.">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            moon: { deep: '#0F172A', soft: '#1E293B', silver: '#E5E7EB', glow: '#A78BFA' }
+          },
+          fontFamily: { display: ['Playfair Display','serif'], ui: ['Inter','sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root{ --accent:#A78BFA; --bg:#0F172A; --muted:rgba(230,233,238,0.78); }
+    body{margin:0;background:var(--bg);color:var(--muted);font-family:Inter,system-ui; -webkit-font-smoothing:antialiased;}
+    .photo{object-fit:cover;display:block}
+    .polaroid{border-radius:10px;overflow:hidden;box-shadow:0 12px 40px rgba(2,6,23,0.6)}
+    .grid-gallery{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr)}
+    @media(min-width:768px){ .grid-gallery{grid-template-columns:repeat(4,1fr)} }
+    .ll-lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;background:rgba(2,6,23,0.96);padding:2rem}
+    .ll-lightbox.open{display:flex}
+    .ll-lightbox img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 40px 120px rgba(8,10,30,0.75)}
+    .ll-close,.ll-prev,.ll-next{position:absolute;background:rgba(0,0,0,0.45);color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .reveal{animation:fadeUp .52s cubic-bezier(.2,.9,.2,1) forwards}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @media (prefers-reduced-motion: reduce){ .reveal{animation:none} }
+  </style>
+</head>
+<body class="antialiased bg-moon-deep text-moon-silver">
+  <main class="max-w-3xl mx-auto p-6">
+    <!-- HERO -->
+    <section class="text-center py-8">
+      <div class="mx-auto w-56 h-56 rounded-full overflow-hidden ring-8 ring-moon-soft shadow-lg">
+        <img src="./assets/hero.webp" alt="Hero Lee" class="w-full h-full photo">
+      </div>
+      <h1 class="text-4xl font-bold text-white mt-6">Lee</h1>
+      <p id="days" class="text-moon-silver/80 mt-2">— X dias juntos —</p>
+
+      <div class="mt-6 flex justify-center gap-3">
+        <a href="https://wa.me/258932783626?text=Olá!%20Quero%20encomendar%20o%20template%20Moonlight" class="px-4 py-2 bg-[--accent] text-white rounded-md">Encomendar</a>
+        <a href="#carta" class="px-4 py-2 border border-white/10 text-white rounded-md">Ler carta</a>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="mt-8">
+      <h2 class="text-xl font-semibold text-white mb-3">Nossos Momentos</h2>
+      <div id="gallery" class="grid-gallery">
+        <button class="polaroid" data-index="0"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-01.webp" alt="Momento 1"></button>
+        <button class="polaroid" data-index="1"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-02.webp" alt="Momento 2"></button>
+        <button class="polaroid" data-index="2"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-03.webp" alt="Momento 3"></button>
+        <button class="polaroid" data-index="3"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-04.webp" alt="Momento 4"></button>
+        <button class="polaroid" data-index="4"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-05.webp" alt="Momento 5"></button>
+        <button class="polaroid" data-index="5"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-06.webp" alt="Momento 6"></button>
+        <button class="polaroid" data-index="6"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-07.webp" alt="Momento 7"></button>
+        <button class="polaroid" data-index="7"><img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-08.webp" alt="Momento 8"></button>
+      </div>
+    </section>
+
+    <!-- LETTER (dedicated to "à princesa") -->
+    <section id="carta" class="mt-8 bg-moon-soft/6 p-5 rounded-md border border-moon-soft/20 overflow-hidden">
+      <h3 class="text-lg font-semibold text-white mb-3">Carta à princesa</h3>
+      <article class="prose prose-invert max-w-none">
+        <p id="love-paragraph" class="text-moon-silver/90 leading-relaxed opacity-0 translate-y-3">
+          Meu amor, <br><br>
+          Minha princesa — és a luz calma que transforma qualquer noite em lar. As tuas mãos, o teu olhar, as pequenas certezas que me dás quando o mundo treme: tudo isso vive em mim como um porto seguro. <br><br>
+          Obrigado por cuidares dos nossos dias com ternura; obrigado por seres a coragem tranquila que me inspira. Que continue a ser contigo — por agora, por sempre. <br><br>
+        </p>
+
+        <div class="mt-6 text-right">
+          <div id="signature" class="text-sm text-[--accent] font-semibold opacity-0 scale-95">Com todo o meu amor,</div>
+          <div id="sign-name" class="font-display text-2xl text-white font-bold mt-1 opacity-0 translate-y-2">Lee</div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="ll-lightbox" class="ll-lightbox" role="dialog" aria-hidden="true">
+    <div class="content">
+      <button class="ll-close" aria-label="Fechar (Esc)">✕</button>
+      <button class="ll-prev" aria-label="Anterior">‹</button>
+      <div style="display:flex;flex-direction:column;align-items:center;">
+        <img id="ll-img" src="" alt="">
+        <div id="ll-caption" class="ll-caption"></div>
+        <div class="ll-touchhint">Swipe para navegar</div>
+      </div>
+      <button class="ll-next" aria-label="Próxima">›</button>
+    </div>
+  </div>
+
+  <script>
+    // lightbox + gallery init (same logic as moonlight)
+    const galleryImgs = Array.from(document.querySelectorAll('.gallery-img'));
+    const lightbox = document.getElementById('ll-lightbox');
+    const llImg = document.getElementById('ll-img');
+    const llCaption = document.getElementById('ll-caption');
+    const btnClose = document.querySelector('.ll-close');
+    const btnPrev = document.querySelector('.ll-prev');
+    const btnNext = document.querySelector('.ll-next');
+    let currentIndex = 0;
+
+    const items = galleryImgs.map(img => ({ src: img.getAttribute('src'), alt: img.getAttribute('alt') || '' }));
+
+    function openLightbox(index){
+      currentIndex = index;
+      const it = items[currentIndex];
+      llImg.src = it.src; llImg.alt = it.alt;
+      llCaption.textContent = it.alt || `Imagem ${currentIndex+1}`;
+      lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false');
+      btnClose.focus(); document.body.style.overflow='hidden';
+    }
+    function closeLightbox(){ lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); llImg.src=''; document.body.style.overflow=''; }
+    function next(){ currentIndex=(currentIndex+1)%items.length; updateLightbox(); }
+    function prev(){ currentIndex=(currentIndex-1+items.length)%items.length; updateLightbox(); }
+    function updateLightbox(){ const it=items[currentIndex]; llImg.src=it.src; llImg.alt=it.alt; llCaption.textContent = it.alt || `Imagem ${currentIndex+1}`; }
+
+    document.querySelectorAll('#gallery [data-index]').forEach(btn=> btn.addEventListener('click', ()=> openLightbox(Number(btn.dataset.index)) ));
+    btnClose.addEventListener('click', closeLightbox); btnPrev.addEventListener('click', prev); btnNext.addEventListener('click', next);
+    document.addEventListener('keydown', e=> { if (lightbox.classList.contains('open')) { if (e.key==='Escape') closeLightbox(); if (e.key==='ArrowRight') next(); if (e.key==='ArrowLeft') prev(); }});
+
+    // simple touch support
+    let startX=0; llImg.addEventListener && llImg.addEventListener('touchstart', e=> startX=e.touches[0].clientX);
+    llImg.addEventListener && llImg.addEventListener('touchend', e=> { const dx = e.changedTouches[0].clientX - startX; if (dx>40) prev(); else if (dx < -40) next(); });
+
+    // compute days (edit startISO if necessário)
+    (function computeDays(){ const startISO='2020-02-14'; const start=new Date(startISO+'T00:00:00'); const now=new Date(); const days=Math.max(0, Math.floor((now-start)/(1000*60*60*24))); const el=document.getElementById('days'); if (el) el.textContent = `— ${days.toLocaleString()} dias juntos —`; })();
+
+    // reveal animation for letter
+    (function(){ document.addEventListener('DOMContentLoaded', ()=> {
+      const para = document.getElementById('love-paragraph'); if(!para) return;
+      const words = para.innerHTML.split(' ').map(w=> `<span class="word">${w}</span>`).join(' ');
+      para.innerHTML = words;
+      setTimeout(()=> {
+        para.classList.add('reveal');
+        const spans = para.querySelectorAll('.word');
+        spans.forEach((s,i)=> setTimeout(()=> { s.style.opacity='1'; }, 90 + i*18));
+        document.getElementById('signature').classList.add('reveal'); document.getElementById('sign-name').classList.add('reveal');
+      }, 420);
+    }); })();
+  </script>
+</body>
+</html>
