@@ -5,214 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Elsa & Desconhecido — Moonlight • LoveLive</title>
   <meta name="description" content="Página Moonlight — amor sob a lua. Fotos, música e carta.">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            moon: {
-              deep: '#0F172A',
-              soft: '#1E293B',
-              silver: '#E5E7EB',
-              glow: '#A78BFA'
-            }
-          },
-          fontFamily: { display: ['Playfair Display','serif'], ui: ['Inter','sans-serif'] }
-        }
-      }
-    }
-  </script>
+  
 
-  <style>
-  /* Theme variables */
-:root{
-  --moon-deep: #0F172A;
-  --moon-soft: #1E293B;
-  --moon-silver: #E5E7EB;
-  --moon-glow: #A78BFA;
-  --text-default: #E6E9EE;
-  --muted: rgba(230,233,238,0.78);
-  --glass: rgba(255,255,255,0.04);
-  --card-shadow: 0 10px 30px rgba(2,6,23,0.55);
-  --radius: 12px;
-  --max-content-width: 1100px;
-  --accent: var(--moon-glow);
-  --transition-fast: 180ms;
-  --transition-med: 320ms;
-  --transition-slow: 520ms;
-}
-
-/* Base */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--moon-deep);
-  color:var(--text-default);
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.5;
-  -webkit-text-size-adjust:100%;
-}
-
-/* Layout helpers */
-.container{
-  max-width:var(--max-content-width);
-  margin:0 auto;
-  padding:0 1rem;
-}
-
-/* Typography */
-h1,h2,h3,h4{font-family:"Playfair Display",serif;margin:0 0 .5rem;line-height:1.05}
-p{margin:0 0 1rem}
-.lead{color:var(--muted);font-size:1.05rem}
-
-/* Images */
-.photo{object-fit:cover;display:block}
-img{max-width:100%;height:auto;display:block}
-
-/* Card / Polaroid */
-.polaroid{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:var(--card-shadow);
-  transition:transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
-}
-.polaroid:hover{ transform: translateY(-6px) scale(1.01); box-shadow: 0 18px 60px rgba(0,0,0,0.5); }
-
-/* Gallery grid */
-.grid-gallery{ display:grid; gap:0.75rem; grid-template-columns: repeat(2, 1fr); }
-@media(min-width:768px){ .grid-gallery{ grid-template-columns: repeat(4, 1fr); } }
-
-/* Buttons */
-.btn{
-  display:inline-flex; align-items:center; gap:.5rem;
-  padding:.6rem 1rem; border-radius:999px; font-weight:600;
-  transition:opacity var(--transition-fast), transform var(--transition-fast);
-}
-.btn-primary{ background:var(--accent); color:white; box-shadow:0 8px 26px rgba(167,139,250,0.12); }
-.btn-ghost{ background:transparent; color:var(--muted); border:1px solid rgba(230,233,238,0.06); }
-
-/* Lightbox (robust & immersive) */
-/* Accepts both .ll-lightbox and #ll-lightbox naming */
-.ll-lightbox, #ll-lightbox {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  background: linear-gradient(180deg, rgba(2,6,23,0.92), rgba(2,6,23,0.96));
-  backdrop-filter: blur(8px);
-  padding: 2rem;
-  -webkit-tap-highlight-color: transparent;
-}
-.ll-lightbox.open, #ll-lightbox.open { display:flex; }
-
-/* lightbox content wrapper */
-.ll-lightbox .content, #ll-lightbox .content {
-  position: relative;
-  width: min(1200px, 96vw);
-  height: min(88vh, 960px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap: 1rem;
-}
-
-/* the image itself (large, centered) */
-.ll-lightbox img, #ll-lightbox img {
-  width:auto;
-  height:auto;
-  max-width: 92vw;
-  max-height: 88vh;
-  object-fit: contain;
-  border-radius: 14px;
-  box-shadow: 0 40px 120px rgba(8,10,30,0.7);
-  transition: transform var(--transition-fast) cubic-bezier(.2,.9,.2,1), opacity var(--transition-fast);
-  transform-origin: center center;
-}
-
-/* subtle zoom animation */
-@keyframes zoomSoft {
-  from { opacity: 0; transform: scale(.96); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.ll-lightbox.open img, #ll-lightbox.open img { animation: zoomSoft .38s ease both; }
-
-/* controls */
-.ll-close, #ll-lightbox .ll-close, .ll-prev, .ll-next {
-  position:absolute; z-index: 30;
-  background: rgba(0,0,0,0.44); color: #fff;
-  border: none; padding: 8px 10px; border-radius: 10px;
-  cursor: pointer; backdrop-filter: blur(4px);
-  transition: transform var(--transition-fast), opacity var(--transition-fast);
-}
-.ll-close { top: 16px; right: 16px; }
-.ll-prev { left: 12px; top: 50%; transform: translateY(-50%); }
-.ll-next { right: 12px; top: 50%; transform: translateY(-50%); }
-.ll-close:focus, .ll-prev:focus, .ll-next:focus{ outline: 2px solid rgba(167,139,250,0.22); outline-offset: 3px; }
-
-/* caption & touch hint */
-.ll-caption{ color:var(--muted); font-size: .95rem; margin-top:.6rem; text-align:center; }
-.ll-touchhint{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); color:rgba(230,233,238,0.85); font-size:12px; }
-
-/* make controls less intrusive on mobile */
-@media(max-width:640px){
-  .ll-prev, .ll-next { display:none; }
-  .ll-close { top: 10px; right:10px; padding:6px 8px; border-radius:8px; }
-}
-
-/* Reveal / micro-animations */
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-@keyframes floatSlow {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
-}
-@keyframes pulseSoft {
-  0% { transform: scale(1); opacity: 0.95; }
-  50% { transform: scale(1.03); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.95; }
-}
-
-.reveal { animation: fadeUp var(--transition-slow) cubic-bezier(.2,.9,.2,1) forwards; }
-.float-slow { animation: floatSlow 4s ease-in-out infinite; }
-.pulse-soft { animation: pulseSoft 2.4s ease-in-out infinite; transform-origin:center; }
-
-/* Word helpers (used by JS split) */
-.word{ display:inline-block; will-change: transform, opacity; transform-origin: center; }
-
-/* Accessibility: respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .reveal, .float-slow, .pulse-soft, .ll-lightbox img { animation: none !important; transition:none !important; }
-}
-
-/* Footer / small components */
-.signature { font-family: "Playfair Display", serif; font-size:1.25rem; color:var(--accent); }
-
-/* Utility helpers */
-.hidden { display:none !important; }
-.center { display:flex; align-items:center; justify-content:center; }
-
-/* Small responsive tweaks */
-@media(min-width:768px){
-  .container { padding:0 2rem; }
-  .polaroid img { height:220px; object-fit:cover; }
-}
-@media(max-width:767px){
-  .polaroid img { height:160px; }
-  .container { padding:0 1rem; }
-}
-
-  </style>
+  
 </head>
 <body class="antialiased bg-moon-deep text-moon-silver font-ui">
   <main class="max-w-3xl mx-auto p-6">
@@ -232,7 +30,7 @@ img{max-width:100%;height:auto;display:block}
 
     <!-- VIDEO (CINEMATIC) -->
     <section class="mt-8 bg-black/30 rounded-lg p-4">
-      <video src="./assets/clip.mp4" controls playsinline class="w-full rounded-md"></video>
+      <video src="/assets/clip.mp4" controls playsinline class="w-full rounded-md"></video>
     </section>
 
     <!-- GALLERY -->
@@ -241,26 +39,26 @@ img{max-width:100%;height:auto;display:block}
 
       <div id="gallery" class="grid grid-cols-2 md:grid-cols-4 gap-3">
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="0" aria-label="Abrir imagem 1">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-01.webp" alt="Momento 1">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-01.webp" alt="Momento 1">
         </button>
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="1" aria-label="Abrir imagem 2">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-02.webp" alt="Momento 2">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-02.webp" alt="Momento 2">
         </button>
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="2" aria-label="Abrir imagem 3">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-03.webp" alt="Momento 3">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-03.webp" alt="Momento 3">
         </button>
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="3" aria-label="Abrir imagem 4">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-04.webp" alt="Momento 4">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-04.webp" alt="Momento 4">
         </button>
 
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="4" aria-label="Abrir imagem 5">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-05.webp" alt="Momento 5">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-05.webp" alt="Momento 5">
         </button>
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="5" aria-label="Abrir imagem 6">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-06.webp" alt="Momento 6">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-06.webp" alt="Momento 6">
         </button>
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="6" aria-label="Abrir imagem 7">
-          <img class="w-full h-48 rounded-md photo gallery-img" src="./assets/gallery-07.webp" alt="Momento 7">
+          <img class="w-full h-48 rounded-md photo gallery-img" src="/assets/gallery-07.webp" alt="Momento 7">
         </button>
         <button class="polaroid block p-0 border-0 bg-transparent" data-index="7" aria-label="Abrir imagem 8">
           <img class="w-full h-48 rounded-md photo gallery-img" src="clients/elsa/assets/gallery-08.webp" alt="Momento 8">
@@ -507,5 +305,22 @@ img{max-width:100%;height:auto;display:block}
 })();
 </script>
 
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            moon: {
+              deep: '#0F172A',
+              soft: '#1E293B',
+              silver: '#E5E7EB',
+              glow: '#A78BFA'
+            }
+          },
+          fontFamily: { display: ['Playfair Display','serif'], ui: ['Inter','sans-serif'] }
+        }
+      }
+    }
+  </script>
 </body>
 </html>
